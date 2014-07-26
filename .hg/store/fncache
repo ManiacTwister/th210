@@ -1,0 +1,17 @@
+data/setup.py.i
+data/escpos/__init__.py.i
+data/exceptions.py.i
+data/escpos/exceptions.py.i
+data/escpos/printer.py.i
+data/escpos.py.i
+data/escpos/escpos.py.i
+data/.hgignore.i
+data/printer.py.i
+data/escpos/constants.py.i
+data/COPYING.i
+data/MANIFEST.i
+data/constants.py.i
+data/README.i
+data/CHANGELOG.i
+data/__init__.py.i
+data/INSTALL.i
