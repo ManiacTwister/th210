@@ -84,6 +84,16 @@ class Escpos:
                 return (image_border / 2, (image_border / 2) + 1)
 
 
+    def storeLogo(self,path_img):
+        #TODO: Check if 1-Bit monochrome image
+        with open(path_img, 'r') as image_file:
+            content = image_file.read()
+        self._raw("\x1B" + content)
+
+    def printLogo(self):
+        self._raw("\x1D\x2F\x00")
+
+
     def _print_image(self, line, size):
         """ Print formatted image """
         i = 0
