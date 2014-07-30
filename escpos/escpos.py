@@ -22,6 +22,56 @@ class Escpos:
     device    = None
 
 
+    def _print_raster_graphic(self, image, printer_dots=576):
+        import math
+        width, height  = image.size
+
+        if image.mode == 'RGBA':
+            data = image.getdata()
+
+            newData = []
+            for item in data:
+                if item[3] < 150:
+                    newData.append((255, 255, 255, 255))
+                else:
+                    newData.append(item)
+
+            image.putdata(newData)
+
+        if image.mode != '1':
+            image = image.convert('1')
+
+        if width != printer_dots:
+            background = Image.new(image.mode, (printer_dots, height), "white")
+            background.paste(image, ((background.size[0]-width)/2,(0)))
+            image = background
+            width, height  = image.size
+            print "Error! wrong width .. Converted to 576px"
+
+        pixels   = image.load()
+
+        for y in range(height):
+            row = ""
+            imgstr = ""
+            for x in range(int(math.ceil(width/8))*8):
+                if pixels[x, y] > 150:
+                    color = 0
+                else:
+                    color = 1
+                imgstr = imgstr + str(color)
+
+                if x%8 == 7:
+                    row = row + str(chr(int(imgstr, 2)))
+                    imgstr = ""
+            self._raw("\x11" + row)
+
+
+    def graphic(self,path_img):
+        """ Open image file """
+        im = Image.open(path_img)
+        self._print_raster_graphic(im)
+
+
     def _check_image_size(self, size):
         """ Check and fix the size of the image to 32 bits """
         if size % 32 == 0:
